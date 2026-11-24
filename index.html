@@ -1,499 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#F1F2F6">
-<title>LIFE OS — Personal Life Manager</title>
-<link rel="stylesheet" href="LIFE_OS.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f8fc">
+  <title>LIFE OS</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="app">
-
-<header class="top">
-  <div class="brand">LIFE<span>OS</span></div>
-  <div class="date" id="todayLabel"></div>
+<header class="topbar">
+  <div>
+    <p class="eyebrow">YOUR PERSONAL SPACE</p>
+    <h1>LIFE OS</h1>
+  </div>
+  <button class="avatar">AM</button>
 </header>
 
 <main>
-
-<!-- HOME -->
-<section class="view active" id="dashboard">
-
-  <div class="heading">
+  <section class="welcome">
     <div>
-      <h1 id="greeting">Good evening, Avishkar</h1>
-      <p class="muted">Your day at a glance.</p>
+      <p class="muted" id="todayLabel">आजचा दिवस</p>
+      <h2>आज स्वतःसाठी काय करणार?</h2>
+      <p class="muted">लहान पावले, रोजची प्रगती.</p>
     </div>
-    <button class="btn secondary" onclick="showView('routine')">+ Add task</button>
-  </div>
+    <div class="progress-ring">
+      <strong id="completion">0%</strong>
+      <span>पूर्ण</span>
+    </div>
+  </section>
 
-  <div class="hero">
-    <div class="small">TODAY'S PROGRESS</div>
-    <h2 id="heroPercent">0% complete</h2>
-    <p id="heroSub">Add your first routine task to get started.</p>
-    <div class="progress"><b id="heroBar"></b></div>
-  </div>
+  <section class="stats">
+    <article class="stat">
+      <span>आजची कामे</span>
+      <strong id="taskCount">0/0</strong>
+    </article>
+    <article class="stat">
+      <span>सलग दिवस</span>
+      <strong id="streak">0</strong>
+    </article>
+    <article class="stat">
+      <span>पाणी</span>
+      <strong id="waterStat">0 / 8</strong>
+    </article>
+  </section>
 
-  <div class="metrics">
-    <div class="metric purple">
-      <span>Tasks completed</span>
-      <strong id="mTasks">0/0</strong>
-    </div>
-    <div class="metric blue">
-      <span>Study time</span>
-      <strong id="mStudy">0 min</strong>
-    </div>
-    <div class="metric yellow">
-      <span>Water glasses</span>
-      <strong id="mWater">0/8</strong>
-    </div>
-    <div class="metric pink">
-      <span>Active goals</span>
-      <strong id="mGoals">0</strong>
-    </div>
-  </div>
-
-  <div class="section-heading">
+  <section class="section-head">
     <div>
-      <h2>Your Workspace</h2>
-      <p class="muted">Everything you need in one place.</p>
+      <p class="eyebrow">TODAY</p>
+      <h3>आजची कामे</h3>
     </div>
-  </div>
+    <button class="text-btn" id="addTaskBtn">+ काम जोडा</button>
+  </section>
 
-  <div class="workspace-grid">
+  <section class="panel" id="taskList"></section>
 
-    <button class="workspace-card lavender" onclick="showView('study')">
-      <span class="workspace-icon">S</span>
-      <strong>Study</strong>
-      <small>Study sessions and history</small>
-    </button>
-
-    <button class="workspace-card sky" onclick="showView('fitness')">
-      <span class="workspace-icon">F</span>
-      <strong>Workout</strong>
-      <small>Fitness and activities</small>
-    </button>
-
-    <button class="workspace-card rose" onclick="showView('routine')">
-      <span class="workspace-icon">R</span>
-      <strong>Routine</strong>
-      <small>Daily tasks and checklist</small>
-    </button>
-
-    <button class="workspace-card butter" onclick="showView('health')">
-      <span class="workspace-icon">N</span>
-      <strong>Food & Water</strong>
-      <small>Meals and hydration</small>
-    </button>
-
-    <button class="workspace-card peach" onclick="showView('sleep')">
-      <span class="workspace-icon">Z</span>
-      <strong>Sleep</strong>
-      <small>Sleep tracking</small>
-    </button>
-
-    <button class="workspace-card mint" onclick="showView('goals')">
-      <span class="workspace-icon">G</span>
-      <strong>Goals</strong>
-      <small>Personal targets</small>
-    </button>
-
-  </div>
-
-  <div class="card">
-    <div class="row between">
-      <h3>Today's Priorities</h3>
-      <button class="text-btn" onclick="showView('routine')">View all</button>
-    </div>
-    <div id="dashTasks"></div>
-  </div>
-
-  <div class="card">
-    <h3>Quick Check-in</h3>
-    <div class="field">
-      <label>Sleep last night (hours)</label>
-      <input id="dashSleep" type="number" min="0" max="24"
-        step=".5" placeholder="e.g. 7.5" onchange="saveSleep()">
-    </div>
-    <h3 class="water-heading">Water Intake</h3>
-    <div class="water" id="dashWater"></div>
-    <p class="notice">Tap a glass to update your water intake.</p>
-  </div>
-
-</section>
-
-<!-- ROUTINE -->
-<section class="view" id="routine">
-  <div class="heading">
+  <section class="section-head">
     <div>
-      <h1>Daily Routine</h1>
-      <p class="muted">Build a rhythm that works for you.</p>
+      <p class="eyebrow">TRACK YOURSELF</p>
+      <h3>Daily Tracker</h3>
     </div>
-  </div>
+  </section>
 
-  <div class="card">
-    <h3>Add a Routine Task</h3>
-    <div class="form">
-      <div class="field">
-        <label>Task name</label>
-        <input id="taskName" placeholder="e.g. Morning walk">
+  <section class="tracker-grid">
+    <article class="tracker panel">
+      <div class="tracker-title">
+        <span>पाणी</span>
+        <strong id="waterCount">0/8 ग्लास</strong>
       </div>
-      <div class="field">
-        <label>Time</label>
-        <input id="taskTime" type="time">
+      <p class="muted small">दररोज ८ ग्लासांचे लक्ष्य</p>
+      <div class="water-actions">
+        <button id="waterMinus" class="round-btn">−</button>
+        <div class="water-bar"><i id="waterBar"></i></div>
+        <button id="waterPlus" class="round-btn">+</button>
       </div>
-      <div class="field">
-        <label>Category</label>
-        <select id="taskCat">
-          <option>Personal</option>
-          <option>Study</option>
-          <option>Fitness</option>
-          <option>Work</option>
-          <option>Health</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Repeat</label>
-        <select id="taskRepeat">
-          <option value="daily">Every day</option>
-          <option value="weekdays">Weekdays</option>
-          <option value="weekends">Weekends</option>
-        </select>
-      </div>
-      <div class="field full">
-        <button class="btn" onclick="addTask()">Add to Routine</button>
-      </div>
-    </div>
-  </div>
+    </article>
 
-  <div class="card">
-    <div class="row between">
-      <h3>Today's Checklist</h3>
-      <span class="pill" id="taskCount">0 tasks</span>
-    </div>
-    <div id="routineList"></div>
-  </div>
-</section>
+    <article class="tracker panel">
+      <div class="tracker-title">
+        <span>अभ्यास</span>
+        <strong id="studyTime">0 मिनिटे</strong>
+      </div>
+      <p class="muted small">आजचा अभ्यास वेळ नोंदवा</p>
+      <button class="wide-btn" id="studyBtn">+ वेळ नोंदवा</button>
+    </article>
 
-<!-- STUDY -->
-<section class="view" id="study">
-  <div class="heading">
+    <article class="tracker panel">
+      <div class="tracker-title">
+        <span>Running</span>
+        <strong id="runDistance">0 km</strong>
+      </div>
+      <p class="muted small">आजचे अंतर नोंदवा</p>
+      <button class="wide-btn" id="runBtn">+ रनिंग नोंदवा</button>
+    </article>
+
+    <article class="tracker panel">
+      <div class="tracker-title">
+        <span>जेवण</span>
+        <strong id="mealCount">0 नोंदी</strong>
+      </div>
+      <p class="muted small">आजचे जेवण आणि स्नॅक्स</p>
+      <button class="wide-btn" id="mealBtn">+ जेवण नोंदवा</button>
+    </article>
+  </section>
+
+  <section class="section-head">
     <div>
-      <h1>Study Tracker</h1>
-      <p class="muted">Track focused learning sessions.</p>
+      <p class="eyebrow">YOUR NOTES</p>
+      <h3>आजच्या नोंदी</h3>
     </div>
-  </div>
+  </section>
 
-  <div class="metrics two">
-    <div class="metric lavender">
-      <span>Today's study</span>
-      <strong id="studyToday">0 min</strong>
-    </div>
-    <div class="metric sky">
-      <span>Sessions logged</span>
-      <strong id="studySessions">0</strong>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Log a Study Session</h3>
-    <div class="form">
-      <div class="field">
-        <label>Subject</label>
-        <input id="studySubject" placeholder="Mathematics">
-      </div>
-      <div class="field">
-        <label>Duration (minutes)</label>
-        <input id="studyMinutes" type="number" min="1" placeholder="45">
-      </div>
-      <div class="field full">
-        <label>Topic or notes</label>
-        <input id="studyNote" placeholder="Optional">
-      </div>
-      <div class="field full">
-        <button class="btn" onclick="addStudy()">Save Session</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Study History</h3>
-    <div id="studyList"></div>
-  </div>
-</section>
-
-<!-- FITNESS -->
-<section class="view" id="fitness">
-  <div class="heading">
-    <div>
-      <h1>Workout</h1>
-      <p class="muted">Track your fitness activities.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Log a Workout</h3>
-    <div class="form">
-      <div class="field">
-        <label>Activity</label>
-        <input id="fitName" placeholder="Running">
-      </div>
-      <div class="field">
-        <label>Duration (minutes)</label>
-        <input id="fitMinutes" type="number" min="1" placeholder="30">
-      </div>
-      <div class="field full">
-        <label>Notes</label>
-        <input id="fitNote" placeholder="Optional">
-      </div>
-      <div class="field full">
-        <button class="btn" onclick="addFitness()">Save Workout</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Workout History</h3>
-    <div id="fitnessList"></div>
-  </div>
-</section>
-
-<!-- FOOD & WATER -->
-<section class="view" id="health">
-  <div class="heading">
-    <div>
-      <h1>Food & Water</h1>
-      <p class="muted">Your daily wellness log.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Water Tracker · <span id="waterCount">0/8</span></h3>
-    <div class="water" id="waterGrid"></div>
-    <div class="field target-field">
-      <label>Daily water target (glasses)</label>
-      <input id="waterTarget" type="number" min="1" max="30"
-        onchange="changeWaterTarget()">
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Log a Meal</h3>
-    <div class="form">
-      <div class="field">
-        <label>Meal</label>
-        <select id="mealType">
-          <option>Breakfast</option>
-          <option>Lunch</option>
-          <option>Snack</option>
-          <option>Dinner</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>What did you eat?</label>
-        <input id="mealName" placeholder="Meal name">
-      </div>
-      <div class="field full">
-        <button class="btn" onclick="addMeal()">Add Meal</button>
-      </div>
-    </div>
-    <div id="mealList"></div>
-  </div>
-</section>
-
-<!-- SLEEP -->
-<section class="view" id="sleep">
-  <div class="heading">
-    <div>
-      <h1>Sleep Tracker</h1>
-      <p class="muted">Understand your sleep pattern.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Log Last Night's Sleep</h3>
-    <div class="form">
-      <div class="field">
-        <label>Bedtime</label>
-        <input id="bedTime" type="time">
-      </div>
-      <div class="field">
-        <label>Wake-up time</label>
-        <input id="wakeTime" type="time">
-      </div>
-      <div class="field full">
-        <button class="btn" onclick="addSleep()">Save Sleep Log</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Recent Sleep Logs</h3>
-    <div id="sleepList"></div>
-  </div>
-</section>
-
-<!-- GOALS -->
-<section class="view" id="goals">
-  <div class="heading">
-    <div>
-      <h1>Goals</h1>
-      <p class="muted">Turn intentions into progress.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Create a Goal</h3>
-    <div class="form">
-      <div class="field">
-        <label>Goal name</label>
-        <input id="goalName" placeholder="Finish 5 chapters">
-      </div>
-      <div class="field">
-        <label>Target date</label>
-        <input id="goalDate" type="date">
-      </div>
-      <div class="field full">
-        <button class="btn" onclick="addGoal()">Create Goal</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Your Goals</h3>
-    <div id="goalList"></div>
-  </div>
-</section>
-
-<!-- PROGRESS -->
-<section class="view" id="analytics">
-  <div class="heading">
-    <div>
-      <h1>Progress</h1>
-      <p class="muted">Your activity and consistency.</p>
-    </div>
-  </div>
-
-  <div class="metrics">
-    <div class="metric purple">
-      <span>Tasks completed</span>
-      <strong id="aDone">0</strong>
-    </div>
-    <div class="metric blue">
-      <span>Study minutes</span>
-      <strong id="aStudy">0</strong>
-    </div>
-    <div class="metric yellow">
-      <span>Workout minutes</span>
-      <strong id="aFitness">0</strong>
-    </div>
-    <div class="metric pink">
-      <span>Active goals</span>
-      <strong id="aGoals">0</strong>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Daily Task Completion · 7 Days</h3>
-    <div id="weeklyBars"></div>
-  </div>
-
-  <div class="card">
-    <h3>Weekly Study & Workout</h3>
-    <div id="weeklyActivity"></div>
-  </div>
-</section>
-
-<!-- CALENDAR -->
-<section class="view" id="calendar">
-  <div class="heading">
-    <div>
-      <h1>Calendar</h1>
-      <p class="muted">Your recent activity.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Last 14 Days</h3>
-    <div class="days" id="calendarGrid"></div>
-  </div>
-
-  <div class="card">
-    <h3>Selected Day Summary</h3>
-    <div id="calendarDetail" class="muted small">
-      Choose a day above.
-    </div>
-  </div>
-</section>
-
-<!-- PROFILE -->
-<section class="view" id="profile">
-  <div class="heading">
-    <div>
-      <h1>Profile</h1>
-      <p class="muted">Your personal LIFE OS settings.</p>
-    </div>
-  </div>
-
-  <div class="card profile-card">
-    <div class="profile-avatar">A</div>
-    <div>
-      <h2>Avishkar</h2>
-      <p class="muted small">Personal Life Manager</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>About LIFE OS</h3>
-    <p class="muted small">
-      Your personal space to manage study, fitness, routine,
-      nutrition, sleep and goals.
-    </p>
-  </div>
-
-  <div class="card">
-    <h3>Data & Backup</h3>
-    <p class="notice">
-      Your information is stored in this browser on this device.
-      Export a backup regularly.
-    </p>
-
-    <div class="row wrap">
-      <button class="btn" onclick="exportData()">Export Backup</button>
-      <label class="btn secondary file-label" for="importFile">Import Backup</label>
-      <input id="importFile" type="file" accept="application/json"
-        hidden onchange="importData(event)">
-    </div>
-
-    <button class="btn danger reset-btn" onclick="resetData()">
-      Reset All App Data
-    </button>
-  </div>
-</section>
-
+  <section class="panel" id="logs">
+    <p class="muted">अजून नोंदी नाहीत.</p>
+  </section>
 </main>
 
-<!-- BOTTOM NAVIGATION -->
-<nav class="mobile-nav" id="mobileNav">
-  <button class="active" onclick="showView('dashboard')">
+<nav class="bottom-nav">
+  <button class="nav-item active" data-tab="home">
     <span>⌂</span>Home
   </button>
-  <button onclick="showView('analytics')">
-    <span>◒</span>Progress
+  <button class="nav-item" data-tab="progress">
+    <span>↗</span>Progress
   </button>
-  <button onclick="showView('calendar')">
+  <button class="nav-item" data-tab="calendar">
     <span>▦</span>Calendar
   </button>
-  <button onclick="showView('profile')">
+  <button class="nav-item" data-tab="profile">
     <span>○</span>Profile
   </button>
 </nav>
 
-</div>
+<div id="toast" class="toast"></div>
 
-<div id="toast" role="status"></div>
 <script src="script.js"></script>
 </body>
 </html>
